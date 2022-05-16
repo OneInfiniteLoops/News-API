@@ -7,7 +7,7 @@ exports.fetchArticleByID = (article_id) => {
       if (article.rows.length === 0) {
         return Promise.reject({
           status: 404,
-          message: "Requested URL not found",
+          message: "Article not found",
         });
       } else {
         return article.rows[0];
