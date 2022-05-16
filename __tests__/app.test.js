@@ -60,14 +60,23 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
   describe("Error Handling", () => {
-    test("404: Responds with 404 Error when endpoint is '/api/topic' – a valid but non-existent", () => {
+    test("404: Responds with 404 Error when endpoint is '/api/articles/:article_id' – a valid but non-existent", () => {
       const article_id = 100;
       return request(app)
         .get(`/api/articles/${article_id}`)
         .expect(404)
         .then((res) => {
-          expect(res.body).toEqual({ message: "Requested URL not found" });
+          expect(res.body).toEqual({ message: "Article not found" });
         });
     });
+  });
+  test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
+    const article_id = "a";
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).toEqual({ message: "Bad Request" });
+      });
   });
 });
