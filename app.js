@@ -10,7 +10,14 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
 
-//Error Handler: 404 – Request not found error
+//PSQL Error Handler: 400 – Bad Request for getArticleByID
+app.use((err, req, res, next) => {
+  if (err.code === "22P02") {
+    res.status(400).send({ message: "Bad Request" });
+  } else next(err);
+});
+
+//Error Handler: 404 – Article not found error
 app.use("/*", (req, res, next) => {
   res.status(404).send({ message: "Requested URL not found" });
 });
