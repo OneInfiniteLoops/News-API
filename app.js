@@ -15,6 +15,11 @@ app.use("/*", (req, res, next) => {
   res.status(404).send({ message: "Requested URL not found" });
 });
 
+//Customer Error Handler for getArticleByID (404 Error)
+app.use((err, req, res, next) => {
+  res.status(err.status).send({ message: err.message });
+});
+
 //Error Handler: 500 – Internal Server Error
 app.use((err, req, res, next) => {
   res.status(500).send({ message: "Internal Server Error" });
