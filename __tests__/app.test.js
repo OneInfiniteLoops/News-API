@@ -60,7 +60,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
   describe("Error Handling", () => {
-    test.skip("404: Responds with 404 Error when endpoint is '/api/topic' – a valid but non-existent", () => {
+    test("404: Responds with 404 Error when endpoint is '/api/topic' – a valid but non-existent", () => {
       const article_id = 100;
       return request(app)
         .get(`/api/articles/${article_id}`)
