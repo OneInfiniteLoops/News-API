@@ -4,8 +4,11 @@ const app = express();
 app.use(express.json());
 
 const { getTopics } = require("./controllers/topics.controllers");
+const { getArticleByID } = require("./controllers/articles.controllers");
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/articles/:article_id", getArticleByID);
 
 //Error Handler: 404 – Request not found error
 app.use("/*", (req, res, next) => {
