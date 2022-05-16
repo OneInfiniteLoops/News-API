@@ -39,3 +39,35 @@ describe("GET /api/topics", () => {
     });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: Responds with an article object of specified id (e.g. 2) in request endpoint, containing the following properties: author(username), title, article_id, body, topic, created_at, votes", () => {
+    const article_id = 2;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(200)
+      .then((res) => {
+        const { article } = res.body;
+        expect(article).toEqual({
+          article_id: 2,
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  describe("Error Handling", () => {
+    test.skip("404: Responds with 404 Error when endpoint is '/api/topic' – a valid but non-existent", () => {
+      const article_id = 100;
+      return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Requested URL not found" });
+        });
+    });
+  });
+});
