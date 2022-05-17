@@ -4,11 +4,16 @@ const app = express();
 app.use(express.json());
 
 const { getTopics } = require("./controllers/topics.controllers");
-const { getArticleByID } = require("./controllers/articles.controllers");
+const {
+  getArticleByID,
+  patchVotesOfArticleByID,
+} = require("./controllers/articles.controllers");
 
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
+
+app.patch("/api/articles/:article_id", patchVotesOfArticleByID);
 
 //400 – Bad Request (PSQL error)
 app.use((err, req, res, next) => {
