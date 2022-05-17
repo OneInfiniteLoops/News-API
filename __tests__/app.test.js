@@ -229,3 +229,26 @@ describe("GET /api/articles/:article_id (comment count)", () => {
     });
   });
 });
+describe("GET /api/articles", () => {
+  test("200: Responds with an array of article objects, each with author(username), title, article_id, topic, created_at, votes,comment_count", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeInstanceOf(Array);
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+});
