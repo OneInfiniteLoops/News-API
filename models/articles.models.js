@@ -15,11 +15,11 @@ exports.fetchArticleByID = (article_id) => {
     });
 };
 
-exports.updateVotesOfArticleByID = (article_id, newVote) => {
+exports.updateVotesOfArticleByID = (articleId, newVote) => {
   return db
     .query(
       `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
-      [newVote, article_id]
+      [newVote, articleId]
     )
     .then((results) => {
       if (!results.rows.length) {
