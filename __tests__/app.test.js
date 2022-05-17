@@ -130,6 +130,15 @@ describe("PATCH /api/articles/:article_id", () => {
           expect(res.body).toEqual({ message: "Bad Request" });
         });
     });
+    test("400: Responds with 400 Error when request body (newVote) does not contain key of inc_votes (e.g. passed an empty object)", () => {
+      const newVote = {};
+      return request(app)
+        .patch(`/api/articles/2`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
     test("404: Responds with 404 Error when inc_votes is valid but article does not exist", () => {
       const newVote = { inc_votes: 1 };
       const article_id = 200;
@@ -138,6 +147,16 @@ describe("PATCH /api/articles/:article_id", () => {
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({ message: "Article not found" });
+        });
+    });
+    test("400: Responds with 400 Error when inc_votes is valid but articleId is not valid", () => {
+      const newVote = { inc_votes: 1 };
+      const article_id = "two";
+      return request(app)
+        .patch(`/api/articles/${article_id}`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
         });
     });
   });
