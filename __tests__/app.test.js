@@ -48,7 +48,7 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then((res) => {
         const { article } = res.body;
-        expect(article).toEqual({
+        expect(article).toMatchObject({
           article_id: 2,
           title: expect.any(String),
           topic: expect.any(String),
@@ -69,15 +69,15 @@ describe("GET /api/articles/:article_id", () => {
           expect(res.body).toEqual({ message: "Article not found" });
         });
     });
-  });
-  test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
-    const article_id = "a";
-    return request(app)
-      .get(`/api/articles/${article_id}`)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).toEqual({ message: "Bad Request" });
-      });
+    test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
+      const article_id = "a";
+      return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
   });
 });
 
@@ -184,6 +184,47 @@ describe("GET /api/users", () => {
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
+        });
+    });
+  });
+});
+describe("GET /api/articles/:article_id (comment count)", () => {
+  test("200: Responds with article specified by id, adding comment_count property that compiles the total count of comments linked to the specified article by article_id", () => {
+    const article_id = 5;
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(200)
+      .then((res) => {
+        const { article } = res.body;
+        expect(article).toEqual({
+          article_id: 5,
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(String),
+        });
+      });
+  });
+  describe("Error handling", () => {
+    test("404: Responds with 404 Error when endpoint is '/api/articles/:article_id' – a valid but non-existent", () => {
+      const article_id = 100;
+      return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Article not found" });
+        });
+    });
+    test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
+      const article_id = "a";
+      return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
         });
     });
   });
