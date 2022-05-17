@@ -7,8 +7,6 @@ exports.fetchUsers = () => {
       copyUsersArray = { ...usersArray };
       return { username: user.username };
     });
-    console.log(usernameArray, "MODELS");
-
     return usernameArray;
   });
 };
