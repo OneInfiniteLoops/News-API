@@ -5,6 +5,7 @@ const request = require("supertest");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/");
 const db = require("../db/connection");
+require("jest-sorted");
 
 afterAll(() => {
   db.end();
@@ -249,6 +250,15 @@ describe("GET /api/articles", () => {
             comment_count: expect.any(String),
           });
         });
+      });
+  });
+  test("Responds with array of articles objects sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
