@@ -20,8 +20,8 @@ describe("GET /api/topics", () => {
       .then((res) => {
         const { topics } = res.body;
         expect(topics).toBeInstanceOf(Array);
-        topics.forEach((topics) => {
-          expect(topics).toMatchObject({
+        topics.forEach((topic) => {
+          expect(topic).toMatchObject({
             description: expect.any(String),
             slug: expect.any(String),
           });
