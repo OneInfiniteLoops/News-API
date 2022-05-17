@@ -120,7 +120,7 @@ describe("PATCH /api/articles/:article_id", () => {
         });
       });
   });
-  describe("error handling for patchVotesOfArticlesByID", () => {
+  describe("Error handling for patchVotesOfArticlesByID", () => {
     test("400: Responds with 400 Error when value of inc_votes is a string", () => {
       const newVote = { inc_votes: "one" };
       return request(app)
