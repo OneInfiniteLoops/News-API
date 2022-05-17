@@ -59,7 +59,7 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
-  describe("Error Handling", () => {
+  describe("Error Handling for GET /api/articles/:article_ids", () => {
     test("404: Responds with 404 Error when endpoint is '/api/articles/:article_id' – a valid but non-existent", () => {
       const article_id = 100;
       return request(app)
@@ -120,13 +120,25 @@ describe("PATCH /api/articles/:article_id", () => {
         });
       });
   });
-  test("400: Responds with 400 Error when value of inc_votes is a string", () => {
-    const newVote = { inc_votes: "one" };
-    return request(app)
-      .patch(`/api/articles/2`)
-      .expect(400)
-      .then((res) => {
-        expect(res.body).toEqual({ message: "Bad Request" });
-      });
+  describe("error handling for patchVotesOfArticlesByID", () => {
+    test("400: Responds with 400 Error when value of inc_votes is a string", () => {
+      const newVote = { inc_votes: "one" };
+      return request(app)
+        .patch(`/api/articles/2`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
+    test("404: Responds with 404 Error when inc_votes is valid but article does not exist", () => {
+      const newVote = { inc_votes: 1 };
+      const article_id = 200;
+      return request(app)
+        .patch(`/api/articles/${article_id}`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Article not found" });
+        });
+    });
   });
 });
