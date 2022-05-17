@@ -252,7 +252,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("Responds with array of articles objects sorted by date in descending order", () => {
+  test("Responds with array of articles objects sorted by date in descending order by default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -260,5 +260,15 @@ describe("GET /api/articles", () => {
         const { articles } = res.body;
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
+  });
+  describe("error handling", () => {
+    test("404: Responds with 404 error when endpoint is GET/api/article (non-existent path)", () => {
+      return request(app)
+        .get("/api/article")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Requested URL not found" });
+        });
+    });
   });
 });
