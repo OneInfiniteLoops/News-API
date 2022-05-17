@@ -80,3 +80,34 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("202: responds with article specified by id and updated votes property incremented by inc_votes as indicated within newVote's inc_votes property", () => {
+    const newVote = { inc_votes: 10 };
+    return request(app)
+      .patch(`/api/articles/2`)
+      .send(newVote)
+      .expect(202)
+      .then((res) => {
+        const { updatedArticle } = res.body;
+        expect(updatedArticle).toEqual({
+          article_id: 2,
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: 10,
+        });
+      });
+  });
+  test.skip("400: Responds with 400 Error when value of inc_votes is a string", () => {
+    const newVote = { inc_votes: "one" };
+    return request(app)
+      .patch(`/api/articles/2`)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).toEqual({ message: "Bad Request" });
+      });
+  });
+});
