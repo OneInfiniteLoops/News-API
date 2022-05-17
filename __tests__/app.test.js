@@ -20,8 +20,8 @@ describe("GET /api/topics", () => {
       .then((res) => {
         const { topics } = res.body;
         expect(topics).toBeInstanceOf(Array);
-        topics.forEach((topics) => {
-          expect(topics).toMatchObject({
+        topics.forEach((topic) => {
+          expect(topic).toMatchObject({
             description: expect.any(String),
             slug: expect.any(String),
           });
@@ -157,6 +157,33 @@ describe("PATCH /api/articles/:article_id", () => {
         .expect(400)
         .then((res) => {
           expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
+  });
+});
+
+describe("GET /api/users", () => {
+  test("200: Responds with an array of user objects each with the username property", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((res) => {
+        const { users } = res.body;
+        expect(users).toBeInstanceOf(Array);
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+          });
+        });
+      });
+  });
+  describe("Error handling", () => {
+    test("404: Responds with 404 Error when endpoint is '/api/topic' – valid but non-existent", () => {
+      return request(app)
+        .get("/api/user")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Requested URL not found" });
         });
     });
   });
