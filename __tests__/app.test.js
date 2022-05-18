@@ -238,7 +238,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then((res) => {
         const { articles } = res.body;
-        expect(articles).toBeSortedBy("created_at", { descending: true });
+        expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
   describe("error handling", () => {
