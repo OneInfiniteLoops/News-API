@@ -40,7 +40,7 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
   const validSortBy = ["created_at"];
   const validOrder = ["asc", "ASC", "desc", "DESC"];
 
-  let queryStr = `SELECT articles.* , 
+  let queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
   COUNT(comments.article_id) AS comment_count 
   FROM articles 
   LEFT JOIN comments ON articles.article_id = comments.article_id 
