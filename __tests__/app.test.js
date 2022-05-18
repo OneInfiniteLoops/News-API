@@ -272,6 +272,16 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
+  test("200: Responds with empty array for comments when article given by article_id is valid and exists, but does not have any comments yet", () => {
+    const article_id = 8;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(200)
+      .then((res) => {
+        const { comments } = res.body;
+        expect(comments).toEqual([]);
+      });
+  });
   describe("Error handling for GET/api/articles/:article_id/comments", () => {
     test("404: Responds with 404 error stating article comments not found when article_id passed is valid but does not yet exist", () => {
       const article_id = 100;
