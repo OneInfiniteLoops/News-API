@@ -17,7 +17,6 @@ exports.fetchArticleByID = (article_id) => {
       }
     });
 };
-//`SELECT * FROM articles WHERE article_id = $1`
 
 exports.updateVotesOfArticleByID = (articleId, newVote) => {
   return db
