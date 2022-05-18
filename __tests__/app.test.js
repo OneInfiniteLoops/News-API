@@ -199,12 +199,12 @@ describe("GET /api/articles/:article_id (comment count)", () => {
         const { article } = res.body;
         expect(article).toEqual({
           article_id: 5,
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
+          title: "UNCOVERED: catspiracy to bring down democracy",
+          topic: "cats",
+          author: "rogersop",
+          body: "Bastet walks amongst us, and the cats are taking arms!",
           created_at: expect.any(String),
-          votes: expect.any(Number),
+          votes: 0,
           comment_count: expect.any(String),
         });
       });
