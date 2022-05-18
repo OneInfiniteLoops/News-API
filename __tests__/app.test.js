@@ -272,4 +272,17 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
+  describe("Error handling for GET/api/articles/:article_id/comments", () => {
+    test("404: Responds with 404 error stating article comments not found when article_id passed is valid but does not yet exist", () => {
+      const article_id = 100;
+      return request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Comments and article does not exist",
+          });
+        });
+    });
+  });
 });
