@@ -261,6 +261,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .then((res) => {
         const { comments } = res.body;
         expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(2);
         comments.forEach((comment) => {
           expect(comment).toMatchObject({
             comment_id: expect.any(Number),
