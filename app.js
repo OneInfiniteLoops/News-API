@@ -12,6 +12,10 @@ const {
 } = require("./controllers/articles.controllers");
 const { getUsers } = require("./controllers/users.controllers");
 
+const {
+  getCommentsByArticleID,
+} = require("./controllers/comments.controllers");
+
 //Require in from errors controllers
 const {
   handlePSQLErrors,
@@ -25,6 +29,7 @@ app.get("/api/articles/:article_id", getArticleByID);
 app.patch("/api/articles/:article_id", patchVotesOfArticleByID);
 app.get("/api/users", getUsers);
 app.get("/api/articles", getArticles);
+app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
 
 //Error Handling
 app.use(handlePSQLErrors);
