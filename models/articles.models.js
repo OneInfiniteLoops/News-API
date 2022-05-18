@@ -36,17 +36,26 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
     });
 };
 
-exports.fetchArticles = () => {
-  return db
-    .query(
-      `SELECT articles.* , 
-      COUNT(comments.article_id) AS comment_count 
-      FROM articles 
-      LEFT JOIN comments ON articles.article_id = comments.article_id 
-      GROUP BY articles.article_id 
-      ORDER BY articles.created_at DESC`
-    )
-    .then((articles) => {
-      return articles.rows;
-    });
+exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
+  const validSortBy = ["created_at"];
+  const validOrder = ["asc", "ASC", "desc", "DESC"];
+
+  let queryStr = `SELECT articles.* , 
+  COUNT(comments.article_id) AS comment_count 
+  FROM articles 
+  LEFT JOIN comments ON articles.article_id = comments.article_id 
+  GROUP BY articles.article_id`;
+
+  if (validSortBy.includes(sort_by)) {
+    queryStr += ` ORDER BY ${sort_by}`;
+    if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
+      query += ` ASC`;
+    }
+  } else {
+    Promise.reject({ status: 400, message: "400 - Invalid Query" });
+  }
+
+  return db.query(queryStr).then((articles) => {
+    return articles.rows;
+  });
 };
