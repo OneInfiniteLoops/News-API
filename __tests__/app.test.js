@@ -70,15 +70,15 @@ describe("GET /api/articles/:article_id", () => {
           expect(res.body).toEqual({ message: "Article not found" });
         });
     });
-    test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
-      const article_id = "a";
-      return request(app)
-        .get(`/api/articles/${article_id}`)
-        .expect(400)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "Bad Request" });
-        });
-    });
+  });
+  test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
+    const article_id = "a";
+    return request(app)
+      .get(`/api/articles/${article_id}`)
+      .expect(400)
+      .then((res) => {
+        expect(res.body).toEqual({ message: "Bad Request" });
+      });
   });
 });
 
@@ -209,26 +209,7 @@ describe("GET /api/articles/:article_id (comment count)", () => {
         });
       });
   });
-  describe("Error handling", () => {
-    test("404: Responds with 404 Error when endpoint is '/api/articles/:article_id' – a valid but non-existent", () => {
-      const article_id = 100;
-      return request(app)
-        .get(`/api/articles/${article_id}`)
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "Article not found" });
-        });
-    });
-    test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
-      const article_id = "a";
-      return request(app)
-        .get(`/api/articles/${article_id}`)
-        .expect(400)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "Bad Request" });
-        });
-    });
-  });
+  describe("Error handling", () => {});
 });
 describe("GET /api/articles", () => {
   test("200: Responds with an array of article objects, each with author(username), title, article_id, topic, created_at, votes,comment_count", () => {
