@@ -39,7 +39,7 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
 exports.fetchArticles = () => {
   return db
     .query(
-      `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.body, articles.created_at, articles.votes, 
+      `SELECT articles.* , 
       COUNT(comments.article_id) AS comment_count 
       FROM articles 
       LEFT JOIN comments ON articles.article_id = comments.article_id 
