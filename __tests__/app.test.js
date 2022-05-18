@@ -284,5 +284,14 @@ describe("GET /api/articles/:article_id/comments", () => {
           });
         });
     });
+    test("400: Responds with Error when article_id passed is not valid e.g. string instead of number for article_id", () => {
+      const article_id = "a";
+      return request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
   });
 });
