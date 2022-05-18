@@ -27,7 +27,9 @@ exports.patchVotesOfArticleByID = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles().then((articles) => {
+  const { sort_by } = req.query;
+  const { order } = req.query;
+  fetchArticles(sort_by, order).then((articles) => {
     res.status(200).send({ articles });
   });
 };

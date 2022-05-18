@@ -199,35 +199,15 @@ describe("GET /api/articles/:article_id (comment count)", () => {
         const { article } = res.body;
         expect(article).toEqual({
           article_id: 5,
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
+          title: "UNCOVERED: catspiracy to bring down democracy",
+          topic: "cats",
+          author: "rogersop",
+          body: "Bastet walks amongst us, and the cats are taking arms!",
           created_at: expect.any(String),
-          votes: expect.any(Number),
+          votes: 0,
           comment_count: expect.any(String),
         });
       });
-  });
-  describe("Error handling", () => {
-    test("404: Responds with 404 Error when endpoint is '/api/articles/:article_id' – a valid but non-existent", () => {
-      const article_id = 100;
-      return request(app)
-        .get(`/api/articles/${article_id}`)
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "Article not found" });
-        });
-    });
-    test("400: Responds with Error when endpoint '/api/articles/:article_id' is not valid e.g. string instead of number for article_id", () => {
-      const article_id = "a";
-      return request(app)
-        .get(`/api/articles/${article_id}`)
-        .expect(400)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "Bad Request" });
-        });
-    });
   });
 });
 describe("GET /api/articles", () => {
@@ -244,7 +224,6 @@ describe("GET /api/articles", () => {
             title: expect.any(String),
             topic: expect.any(String),
             author: expect.any(String),
-            body: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
             comment_count: expect.any(String),
@@ -258,7 +237,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then((res) => {
         const { articles } = res.body;
-        expect(articles).toBeSortedBy("created_at", { descending: true });
+        expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
   describe("error handling", () => {
