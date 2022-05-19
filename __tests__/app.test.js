@@ -240,7 +240,7 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
-  test("200: Responds with an array of article objects filtered by topic passed in query", () => {
+  test("200: Responds with an array of article objects filtered by valid topic passed in query", () => {
     return request(app)
       .get("/api/articles?topic=cats")
       .expect(200)
@@ -260,7 +260,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("200: Responds with an empty array when topic 'paper' is specified in query and it is valid, but no associated articles of that topic exists", () => {
+  test("200: Responds with an empty array when valid topic is specified in query, but no associated articles of that topic exists", () => {
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
