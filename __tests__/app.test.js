@@ -326,4 +326,22 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
+  describe("Error handling for POST /api/articles/:article_id/comments", () => {
+    test("400: responds with 404 error article not found when article_id passed is valid but the corresponding article does not yet exist", () => {
+      const article_id = 100;
+      const newComment = {
+        username: "butter_bridge",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Cannot post comment - article does not exist",
+          });
+        });
+    });
+  });
 });
