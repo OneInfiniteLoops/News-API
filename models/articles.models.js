@@ -52,20 +52,15 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
   let queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
   COUNT(comments.article_id) AS comment_count 
   FROM articles 
-  LEFT JOIN comments ON articles.article_id = comments.article_id 
-  GROUP BY articles.article_id`;
+  LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
   if (topic) {
     queryValues.push(topic);
-    queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
-    COUNT(comments.article_id) AS comment_count 
-    FROM articles 
-    LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.topic = $1
-    GROUP BY articles.article_id`;
+    queryStr += ` WHERE articles.topic = $1`;
   }
 
   if (validSortBy.includes(sort_by)) {
-    queryStr += ` ORDER BY ${sort_by}`;
+    queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by}`;
     if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
       queryStr += ` ASC`;
     } else if (order && !validOrder.includes(order)) {
