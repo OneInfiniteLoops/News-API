@@ -246,6 +246,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then((res) => {
         const { articles } = res.body;
+        expect(articles).toBeInstanceOf(Array);
         articles.forEach((article) => {
           expect(article).toMatchObject({
             article_id: expect.any(Number),
@@ -257,6 +258,15 @@ describe("GET /api/articles", () => {
             comment_count: expect.any(String),
           });
         });
+      });
+  });
+  test("200: Responds with empty array of article objects when topic 'paper' is specified in query and it is valid, but no articles of that topic exists", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toEqual([]);
       });
   });
   test("200: Responds with array of articles sorted by a non-default valid column, when article_id is specified as sort_by in query", () => {
