@@ -240,7 +240,7 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
-  test("200: Responds with an array of article objects filtered by topic 'cats' when topic 'cats' is specified in query", () => {
+  test("200: Responds with an array of article objects filtered by topic passed in query", () => {
     return request(app)
       .get("/api/articles?topic=cats")
       .expect(200)
@@ -258,6 +258,15 @@ describe("GET /api/articles", () => {
             comment_count: expect.any(String),
           });
         });
+      });
+  });
+  test("200: Responds with an empty array when topic 'paper' is specified in query and it is valid, but no associated articles of that topic exists", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toEqual([]);
       });
   });
   test("200: Responds with array of articles sorted by a non-default valid column, when article_id is specified as sort_by in query", () => {
@@ -287,15 +296,7 @@ describe("GET /api/articles", () => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
         });
     });
-    test("404: Responds with 404 error no content found when topic 'paper' is specified in query and it is valid, but no articles of that topic exists", () => {
-      return request(app)
-        .get("/api/articles?topic=paper")
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({ message: "No content found" });
-        });
-    });
-    test("404: Responds with 404 error no content found if topic specified is valid but does not exist in database", () => {
+    test.skip("404: Responds with 404 error no content found if topic specified does not exist in database", () => {
       return request(app)
         .get("/api/articles?topic=nonexistent")
         .expect(404)
