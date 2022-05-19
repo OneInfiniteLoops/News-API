@@ -36,15 +36,25 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
     });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
+exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
   const validSortBy = ["created_at"];
   const validOrder = ["asc", "ASC", "desc", "DESC"];
+  const queryValues = [];
 
   let queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
   COUNT(comments.article_id) AS comment_count 
   FROM articles 
   LEFT JOIN comments ON articles.article_id = comments.article_id 
   GROUP BY articles.article_id`;
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
+    COUNT(comments.article_id) AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.topic = $1
+    GROUP BY articles.article_id`;
+  }
 
   if (validSortBy.includes(sort_by)) {
     queryStr += ` ORDER BY ${sort_by}`;
@@ -55,7 +65,7 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
     Promise.reject({ status: 400, message: "400 - Invalid Query" });
   }
 
-  return db.query(queryStr).then((articles) => {
+  return db.query(queryStr, queryValues).then((articles) => {
     return articles.rows;
   });
 };
