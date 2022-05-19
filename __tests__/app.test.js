@@ -296,7 +296,7 @@ describe("GET /api/articles", () => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
         });
     });
-    test.skip("404: Responds with 404 error no content found if topic specified does not exist in database", () => {
+    test("404: Responds with 404 error no content found if topic specified does not exist in database", () => {
       return request(app)
         .get("/api/articles?topic=nonexistent")
         .expect(404)
