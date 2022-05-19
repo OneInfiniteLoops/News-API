@@ -29,7 +29,12 @@ exports.patchVotesOfArticleByID = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   const { sort_by } = req.query;
   const { order } = req.query;
-  fetchArticles(sort_by, order).then((articles) => {
-    res.status(200).send({ articles });
-  });
+  const { topic } = req.query;
+  fetchArticles(sort_by, order, topic)
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
