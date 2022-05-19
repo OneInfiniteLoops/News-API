@@ -59,8 +59,10 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
     queryStr += ` WHERE articles.topic = $1`;
   }
 
+  queryStr += ` GROUP BY articles.article_id`;
+
   if (validSortBy.includes(sort_by)) {
-    queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by}`;
+    queryStr += ` ORDER BY ${sort_by}`;
     if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
       queryStr += ` ASC`;
     } else if (order && !validOrder.includes(order)) {
@@ -71,8 +73,6 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
   }
 
   return db.query(queryStr, queryValues).then((articles) => {
-    if (!articles.rows.length) {
-      return Promise.reject({ status: 404, message: "No content found" });
-    } else return articles.rows;
+    return articles.rows;
   });
 };
