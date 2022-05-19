@@ -302,7 +302,6 @@ describe("GET /api/articles", () => {
         .then((res) => {
           expect(res.body).toEqual({ message: "No content found" });
         });
-      s;
     });
     test("400: Responds with 400 error if sort_by specified is not valid", () => {
       return request(app)
