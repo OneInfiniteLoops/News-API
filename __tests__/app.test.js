@@ -251,3 +251,58 @@ describe("GET /api/articles", () => {
     });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: Responds with an array of comments for the article given by article_id, each comment contains comment_id, votes, created_at, author and body as properties", () => {
+    const article_id = 5;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(200)
+      .then((res) => {
+        const { comments } = res.body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(2);
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            body: expect.any(String),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            created_at: expect.any(String),
+          });
+        });
+      });
+  });
+  test("200: Responds with empty array for comments when article given by article_id is valid and exists, but does not have any comments yet", () => {
+    const article_id = 8;
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(200)
+      .then((res) => {
+        const { comments } = res.body;
+        expect(comments).toEqual([]);
+      });
+  });
+  describe("Error handling for GET/api/articles/:article_id/comments", () => {
+    test("404: Responds with 404 error stating article comments not found when article_id passed is valid but does not yet exist", () => {
+      const article_id = 100;
+      return request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Comments and article does not exist",
+          });
+        });
+    });
+    test("400: Responds with Error when article_id passed is not valid e.g. string instead of number for article_id", () => {
+      const article_id = "a";
+      return request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "Bad Request" });
+        });
+    });
+  });
+});
