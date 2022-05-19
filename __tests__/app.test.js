@@ -260,15 +260,6 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("200: Responds with empty array of article objects when topic 'paper' is specified in query and it is valid, but no articles of that topic exists", () => {
-    return request(app)
-      .get("/api/articles?topic=paper")
-      .expect(200)
-      .then((res) => {
-        const { articles } = res.body;
-        expect(articles).toEqual([]);
-      });
-  });
   test("200: Responds with array of articles sorted by a non-default valid column, when article_id is specified as sort_by in query", () => {
     return request(app)
       .get("/api/articles?sort_by=article_id")
@@ -295,6 +286,23 @@ describe("GET /api/articles", () => {
         .then((res) => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
         });
+    });
+    test("404: Responds with 404 error no content found when topic 'paper' is specified in query and it is valid, but no articles of that topic exists", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "No content found" });
+        });
+    });
+    test("404: Responds with 404 error no content found if topic specified is valid but does not exist in database", () => {
+      return request(app)
+        .get("/api/articles?topic=nonexistent")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "No content found" });
+        });
+      s;
     });
     test("400: Responds with 400 error if sort_by specified is not valid", () => {
       return request(app)
