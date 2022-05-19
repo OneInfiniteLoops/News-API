@@ -363,5 +363,34 @@ describe("POST /api/articles/:article_id/comments", () => {
           });
         });
     });
+    test("400: responds with 400 error when article_id passed is not valid (datatype is a string instead of a number)", () => {
+      const article_id = "a";
+      const newComment = {
+        username: "butter_bridge",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Bad Request",
+          });
+        });
+    });
+    test("400: responds with 400 error when missing required field, newComment passed is empty", () => {
+      const article_id = 5;
+      const newComment = {};
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Bad Request",
+          });
+        });
+    });
   });
 });
