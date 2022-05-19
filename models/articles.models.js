@@ -76,6 +76,8 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
   }
 
   return db.query(queryStr, queryValues).then((articles) => {
-    return articles.rows;
+    if (!articles.rows.length) {
+      return Promise.reject({ status: 404, message: "No content found" });
+    } else return articles.rows;
   });
 };
