@@ -306,3 +306,24 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with newly posted comment, when request body passed contains existing username and body as properties", () => {
+    const article_id = 5;
+    const newComment = {
+      username: "butter_bridge",
+      body: "An insightful article!",
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(201)
+      .then((res) => {
+        const { postedComment } = res.body;
+        expect(postedComment).toMatchObject({
+          username: expect.any(String),
+          body: expect.any(String),
+        });
+      });
+  });
+});
