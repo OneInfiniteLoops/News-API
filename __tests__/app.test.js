@@ -343,5 +343,21 @@ describe("POST /api/articles/:article_id/comments", () => {
           });
         });
     });
+    test("404: responds with 404 error when article exists, but author(username) does not yet exist in the users db", () => {
+      const article_id = 5;
+      const newComment = {
+        username: "non_existent_user",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Cannot post comment - username is not recognised",
+          });
+        });
+    });
   });
 });
