@@ -80,7 +80,7 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
           if (!result.rows.length) {
             return Promise.reject({
               status: 404,
-              message: "No content found",
+              message: "No topic found",
             });
           } else return articles.rows;
         });
