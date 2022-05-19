@@ -4,7 +4,7 @@ exports.handlePSQLErrors = (err, req, res, next) => {
   } else next(err);
 };
 
-exports.handlePSQLNotPresentErrors = (err, req, res, next) => {
+exports.handlePSQLDataNotPresentErrors = (err, req, res, next) => {
   if (err.code === "23503" && err.constraint === "comments_article_id_fkey") {
     res
       .status(404)

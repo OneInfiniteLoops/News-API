@@ -23,7 +23,7 @@ const {
   handlePathNotFoundErrors,
   handleArticleNotFoundErrors,
   handleInternalServerError,
-  handlePSQLNotPresentErrors,
+  handlePSQLDataNotPresentErrors,
 } = require("./controllers/errors.controllers");
 
 app.get("/api/topics", getTopics);
@@ -36,7 +36,7 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleID);
 
 //Error Handling
 app.use(handlePSQLErrors);
-app.use(handlePSQLNotPresentErrors);
+app.use(handlePSQLDataNotPresentErrors);
 app.use("/*", handlePathNotFoundErrors);
 app.use(handleArticleNotFoundErrors);
 app.use(handleInternalServerError);
