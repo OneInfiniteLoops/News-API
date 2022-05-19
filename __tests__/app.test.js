@@ -306,3 +306,91 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Responds with newly posted comment, when request body passed contains existing username and body as properties", () => {
+    const article_id = 5;
+    const newComment = {
+      username: "butter_bridge",
+      body: "An insightful article!",
+    };
+    return request(app)
+      .post(`/api/articles/${article_id}/comments`)
+      .send(newComment)
+      .expect(201)
+      .then((res) => {
+        const { postedComment } = res.body;
+        expect(postedComment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: "An insightful article!",
+          article_id: 5,
+          username: "butter_bridge",
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+  describe("Error handling for POST /api/articles/:article_id/comments", () => {
+    test("404: responds with 404 error article not found when article_id passed is valid but the corresponding article does not yet exist", () => {
+      const article_id = 100;
+      const newComment = {
+        username: "butter_bridge",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Cannot post comment - article does not exist",
+          });
+        });
+    });
+    test("404: responds with 404 error when article exists, but author(username) does not yet exist in the users db", () => {
+      const article_id = 5;
+      const newComment = {
+        username: "non_existent_user",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Cannot post comment - username is not recognised",
+          });
+        });
+    });
+    test("400: responds with 400 error when article_id passed is not valid (datatype is a string instead of a number)", () => {
+      const article_id = "a";
+      const newComment = {
+        username: "butter_bridge",
+        body: "An insightful article!",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Bad Request",
+          });
+        });
+    });
+    test("400: responds with 400 error when missing required field, newComment passed is empty", () => {
+      const article_id = 5;
+      const newComment = {};
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(newComment)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Bad Request",
+          });
+        });
+    });
+  });
+});

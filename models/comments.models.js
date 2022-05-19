@@ -19,3 +19,24 @@ exports.fetchCommentsByArticleID = (articleId) => {
         });
     });
 };
+
+exports.addCommentByArticleID = (articleId, newComment) => {
+  const { username, body } = newComment;
+
+  return db
+    .query(
+      `INSERT INTO comments (article_id, author, body) VALUES ($1,$2,$3) RETURNING *;`,
+      [articleId, username, body]
+    )
+    .then((results) => {
+      const postedComment = {
+        comment_id: results.rows[0].comment_id,
+        body: results.rows[0].body,
+        article_id: results.rows[0].article_id,
+        username: results.rows[0].author,
+        votes: results.rows[0].votes,
+        created_at: results.rows[0].created_at,
+      };
+      return postedComment;
+    });
+};

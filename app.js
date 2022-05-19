@@ -14,6 +14,7 @@ const { getUsers } = require("./controllers/users.controllers");
 
 const {
   getCommentsByArticleID,
+  postCommentByArticleID,
 } = require("./controllers/comments.controllers");
 
 //Require in from errors controllers
@@ -22,6 +23,7 @@ const {
   handlePathNotFoundErrors,
   handleArticleNotFoundErrors,
   handleInternalServerError,
+  handlePSQLDataNotPresentErrors,
 } = require("./controllers/errors.controllers");
 
 app.get("/api/topics", getTopics);
@@ -30,9 +32,11 @@ app.patch("/api/articles/:article_id", patchVotesOfArticleByID);
 app.get("/api/users", getUsers);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleID);
+app.post("/api/articles/:article_id/comments", postCommentByArticleID);
 
 //Error Handling
 app.use(handlePSQLErrors);
+app.use(handlePSQLDataNotPresentErrors);
 app.use("/*", handlePathNotFoundErrors);
 app.use(handleArticleNotFoundErrors);
 app.use(handleInternalServerError);

@@ -4,6 +4,21 @@ exports.handlePSQLErrors = (err, req, res, next) => {
   } else next(err);
 };
 
+exports.handlePSQLDataNotPresentErrors = (err, req, res, next) => {
+  if (err.code === "23503" && err.constraint === "comments_article_id_fkey") {
+    res
+      .status(404)
+      .send({ message: "Cannot post comment - article does not exist" });
+  } else if (
+    err.code === "23503" &&
+    err.constraint === "comments_author_fkey"
+  ) {
+    res
+      .status(404)
+      .send({ message: "Cannot post comment - username is not recognised" });
+  } else next(err);
+};
+
 exports.handlePathNotFoundErrors = (req, res, next) => {
   res.status(404).send({ message: "Requested URL not found" });
 };
