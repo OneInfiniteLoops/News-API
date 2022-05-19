@@ -320,9 +320,9 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then((res) => {
         const { postedComment } = res.body;
-        expect(postedComment).toMatchObject({
-          username: expect.any(String),
-          body: expect.any(String),
+        expect(postedComment).toEqual({
+          username: "butter_bridge",
+          body: "An insightful article!",
         });
       });
   });
