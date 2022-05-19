@@ -296,6 +296,14 @@ describe("GET /api/articles", () => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
         });
     });
+    test("400: Responds with 400 error if sort_by specified is not valid", () => {
+      return request(app)
+        .get("/api/articles?sort_by=invalid")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "400 - Invalid Query" });
+        });
+    });
   });
 });
 
