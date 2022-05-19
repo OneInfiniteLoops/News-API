@@ -268,6 +268,15 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSortedBy("article_id");
       });
   });
+  test("200: Responds with array of articles ordered by a non-default valid ORDER, when 'ASC' is specified as order in query", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSorted("created_at", { descending: false });
+      });
+  });
   describe("Error handling for GET /api/articles", () => {
     test("404: Responds with 404 error when endpoint is GET/api/article (non-existent path)", () => {
       return request(app)
