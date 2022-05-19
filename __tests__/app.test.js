@@ -231,7 +231,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("Responds with array of articles objects sorted by date in descending order by default", () => {
+  test("200: Responds with array of article objects sorted by date in descending order by default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -240,7 +240,26 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
-  describe("error handling", () => {
+  test("200: Responds with an array of article objects filtered by topic 'cats' when topic 'cats' is specified in query", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: "cats",
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+  describe("Error handling for GET /api/articles", () => {
     test("404: Responds with 404 error when endpoint is GET/api/article (non-existent path)", () => {
       return request(app)
         .get("/api/article")
