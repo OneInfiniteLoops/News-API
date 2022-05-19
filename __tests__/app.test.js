@@ -259,6 +259,15 @@ describe("GET /api/articles", () => {
         });
       });
   });
+  test("200: Responds with array of articles sorted by a non-default valid column, when article_id is specified as sort_by in query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("article_id");
+      });
+  });
   describe("Error handling for GET /api/articles", () => {
     test("404: Responds with 404 error when endpoint is GET/api/article (non-existent path)", () => {
       return request(app)

@@ -37,7 +37,15 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
 };
 
 exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
-  const validSortBy = ["created_at"];
+  const validSortBy = [
+    "created_at",
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "votes",
+    "comment_count",
+  ];
   const validOrder = ["asc", "ASC", "desc", "DESC"];
   const queryValues = [];
 
