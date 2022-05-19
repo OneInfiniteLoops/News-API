@@ -68,6 +68,8 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
     queryStr += ` ORDER BY ${sort_by}`;
     if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
       queryStr += ` ASC`;
+    } else if (order && !validOrder.includes(order)) {
+      return Promise.reject({ status: 400, message: "400 - Invalid Query" });
     }
   } else {
     return Promise.reject({ status: 400, message: "400 - Invalid Query" });
