@@ -320,9 +320,13 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then((res) => {
         const { postedComment } = res.body;
-        expect(postedComment).toEqual({
-          username: "butter_bridge",
+        expect(postedComment).toMatchObject({
+          comment_id: expect.any(Number),
           body: "An insightful article!",
+          article_id: 5,
+          username: "butter_bridge",
+          votes: expect.any(Number),
+          created_at: expect.any(String),
         });
       });
   });

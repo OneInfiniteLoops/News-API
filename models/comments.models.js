@@ -30,8 +30,12 @@ exports.addCommentByArticleID = (articleId, newComment) => {
     )
     .then((results) => {
       const postedComment = {
-        username: results.rows[0].author,
+        comment_id: results.rows[0].comment_id,
         body: results.rows[0].body,
+        article_id: results.rows[0].article_id,
+        username: results.rows[0].author,
+        votes: results.rows[0].votes,
+        created_at: results.rows[0].created_at,
       };
       return postedComment;
     });
