@@ -70,7 +70,7 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
       queryStr += ` ASC`;
     }
   } else {
-    Promise.reject({ status: 400, message: "400 - Invalid Query" });
+    return Promise.reject({ status: 400, message: "400 - Invalid Query" });
   }
 
   return db.query(queryStr, queryValues).then((articles) => {
