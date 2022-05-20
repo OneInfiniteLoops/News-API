@@ -38,7 +38,7 @@ To run and test the project locally, please follow the instructions below:
 
 3. Please note that you will need to access your own environment variables before you can connect to the two local databases. You can do this by creating two .env. files in the parent directory of the repository, .env.test and .env.development. These files are automatically ignored by Git. Once the files are created, set PGDATABASE=<database_name_here> to the corresponding databases respectively. For example, write PGDATABASE=<database_name_test> for the .env.test file.
 
-4. Run "jest" on the test suites enclosed in app.test.js. The file is located in the "test" directory. Running the test file will automatically seed and use data from the test databases.
+4. Run "jest" on the test suites enclosed in app.test.js with the command 'npm test <app.test.js>' in the terminal. The file is located in the "test" directory. Running the test file will automatically seed and use data from the test databases.
 
 ## Contact
 
