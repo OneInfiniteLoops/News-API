@@ -40,3 +40,19 @@ exports.addCommentByArticleID = (articleId, newComment) => {
       return postedComment;
     });
 };
+
+exports.removeCommentByCommentID = (commentId) => {
+  return db
+    .query(`SELECT * FROM comments WHERE comment_id = $1`, [commentId])
+    .then((results) => {
+      if (!results.rows.length) {
+        return Promise.reject({
+          status: 404,
+          message: "Comment referenced to be deleted does not exist",
+        });
+      } else
+        return db.query(`DELETE FROM comments WHERE comment_id = $1;`, [
+          commentId,
+        ]);
+    });
+};
