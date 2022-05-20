@@ -30,6 +30,7 @@ const {
   handlePSQLDataNotPresentErrors,
 } = require("./controllers/errors.controllers");
 
+app.get("/", getEndpoints);
 app.get("/api", getEndpoints);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleByID);
