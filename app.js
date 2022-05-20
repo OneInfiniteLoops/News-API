@@ -6,6 +6,7 @@ app.use(express.json());
 //Require in functions from controllers
 const { getTopics } = require("./controllers/topics.controllers");
 const {
+  getEndpoints,
   getArticleByID,
   patchVotesOfArticleByID,
   getArticles,
@@ -27,6 +28,7 @@ const {
   handlePSQLDataNotPresentErrors,
 } = require("./controllers/errors.controllers");
 
+app.get("/api", getEndpoints);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleByID);
 app.patch("/api/articles/:article_id", patchVotesOfArticleByID);
