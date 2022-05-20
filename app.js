@@ -5,8 +5,10 @@ app.use(express.json());
 
 //Require in functions from controllers
 const { getTopics } = require("./controllers/topics.controllers");
+
+const { getEndpoints } = require("./controllers/api.controllers");
+
 const {
-  getEndpoints,
   getArticleByID,
   patchVotesOfArticleByID,
   getArticles,
