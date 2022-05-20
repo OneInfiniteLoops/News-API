@@ -25,17 +25,20 @@ The RESTful API, through the various available endpoints, relays information to 
 To run and test the project locally, please follow the instructions below:
 
 1. Clone the News API repo
+
    ```sh
    git clone https://github.com/OneInfiniteLoops/News-API.git
    ```
+
 2. Install NPM packages
+
    ```sh
    npm install
    ```
 
-## Note
+3. Please note that you will need to access your own environment variables before you can connect to the two local databases. You can do this by creating two .env. files in the parent directory of the repository, .env.test and .env.development. These files are automatically ignored by Git. Once the files are created, set PGDATABASE=<database_name_here> to the corresponding databases respectively. For example, write PGDATABASE=<database_name_test> for the .env.test file.
 
-Please note that you will need to access your own environment variables before you can connect to the two local databases. You can do this by creating two .env. files, .env.test and .env.development. Once the files are created, set PGDATABASE=<database_name_here> to the corresponding databases respectively. For example, write PGDATABASE=<database_name_test> for the .env.test file.
+4. Run "jest" on the test suites enclosed in app.test.js. The file is located in the "test" directory. Running the test file will automatically seed and use data from the test databases.
 
 ## Contact
 
