@@ -465,3 +465,10 @@ describe("POST /api/articles/:article_id/comments", () => {
     });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Responds with no content", () => {
+    const comment_id = 5;
+    return request(app).delete(`/api/comments/${comment_id}`).expect(204);
+  });
+});
