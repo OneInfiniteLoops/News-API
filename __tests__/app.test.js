@@ -231,7 +231,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("Responds with array of articles objects sorted by date in descending order by default", () => {
+  test("200: Responds with array of article objects sorted by date in descending order by default", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -240,13 +240,84 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted("created_at", { descending: true });
       });
   });
-  describe("error handling", () => {
+  test("200: Responds with an array of article objects filtered by valid topic passed in query", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeInstanceOf(Array);
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: "cats",
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(String),
+          });
+        });
+      });
+  });
+  test("200: Responds with an empty array when valid topic is specified in query, but no associated articles of that topic exists", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toEqual([]);
+      });
+  });
+  test("200: Responds with array of articles sorted by a non-default valid column, when article_id is specified as sort_by in query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("article_id");
+      });
+  });
+  test("200: Responds with array of articles ordered by a non-default valid ORDER, when 'ASC' is specified as order in query", () => {
+    return request(app)
+      .get("/api/articles?order=ASC")
+      .expect(200)
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSorted("created_at", { descending: false });
+      });
+  });
+  describe("Error handling for GET /api/articles", () => {
     test("404: Responds with 404 error when endpoint is GET/api/article (non-existent path)", () => {
       return request(app)
         .get("/api/article")
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({ message: "Requested URL not found" });
+        });
+    });
+    test("404: Responds with 404 error no topic found if topic specified does not exist in database", () => {
+      return request(app)
+        .get("/api/articles?topic=nonexistent")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "No topic found" });
+        });
+    });
+    test("400: Responds with 400 error if sort_by specified is not valid", () => {
+      return request(app)
+        .get("/api/articles?sort_by=invalid")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "400 - Invalid Query" });
+        });
+    });
+    test("400: Responds with 400 error if order specified is not valid", () => {
+      return request(app)
+        .get("/api/articles?order=invalid")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ message: "400 - Invalid Query" });
         });
     });
   });

@@ -36,26 +36,54 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
     });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "DESC") => {
-  const validSortBy = ["created_at"];
+exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
+  const validSortBy = [
+    "created_at",
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "votes",
+    "comment_count",
+  ];
   const validOrder = ["asc", "ASC", "desc", "DESC"];
+  const queryValues = [];
 
   let queryStr = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, 
   COUNT(comments.article_id) AS comment_count 
   FROM articles 
-  LEFT JOIN comments ON articles.article_id = comments.article_id 
-  GROUP BY articles.article_id`;
+  LEFT JOIN comments ON articles.article_id = comments.article_id`;
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE articles.topic = $1`;
+  }
+
+  queryStr += ` GROUP BY articles.article_id`;
 
   if (validSortBy.includes(sort_by)) {
     queryStr += ` ORDER BY ${sort_by}`;
     if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
-      query += ` ASC`;
+      queryStr += ` ASC`;
+    } else if (order && !validOrder.includes(order)) {
+      return Promise.reject({ status: 400, message: "400 - Invalid Query" });
     }
   } else {
-    Promise.reject({ status: 400, message: "400 - Invalid Query" });
+    return Promise.reject({ status: 400, message: "400 - Invalid Query" });
   }
 
-  return db.query(queryStr).then((articles) => {
-    return articles.rows;
+  return db.query(queryStr, queryValues).then((articles) => {
+    if (!articles.rows.length) {
+      return db
+        .query(`SELECT * FROM topics WHERE slug = $1`, [topic])
+        .then((result) => {
+          if (!result.rows.length) {
+            return Promise.reject({
+              status: 404,
+              message: "No topic found",
+            });
+          } else return articles.rows;
+        });
+    } else return articles.rows;
   });
 };
