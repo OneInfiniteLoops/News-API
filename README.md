@@ -32,26 +32,6 @@ To run and test the project locally, please follow the instructions below:
    ```sh
    npm install
    ```
-3. Install Express packages
-   ```sh
-   npm install express
-   ```
-4. Install PostgreSQL packages
-   ```sh
-   npm install pg
-   ```
-5. Install jest to run the test suites
-   ```sh
-   npm install jest -D
-   ```
-6. Install supertest to run the test suites
-   ```sh
-   npm I -D supertest
-   ```
-7. Install dotenv
-   ```sh
-   npm install dotenv --save
-   ```
 
 ## Note
 
