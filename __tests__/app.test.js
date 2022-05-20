@@ -465,3 +465,34 @@ describe("POST /api/articles/:article_id/comments", () => {
     });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Responds with no content", () => {
+    const comment_id = 5;
+    return request(app).delete(`/api/comments/${comment_id}`).expect(204);
+  });
+  describe("Error handling for DELETE /api/comments/:comment_id", () => {
+    test("404:Responds with error when comment_id passed in query does not exist in database, comment not found", () => {
+      const comment_id = 100;
+      return request(app)
+        .delete(`/api/comments/${comment_id}`)
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Comment referenced to be deleted does not exist",
+          });
+        });
+    });
+    test("400: Responds with error when comment_id passed in query is not valid", () => {
+      const comment_id = "a";
+      return request(app)
+        .delete(`/api/comments/${comment_id}`)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Bad Request",
+          });
+        });
+    });
+  });
+});
