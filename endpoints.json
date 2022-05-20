@@ -1,27 +1,120 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "retrieves a json object outlining all the available endpoints of this API"
   },
+
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "retrieves an array of all topics",
     "queries": [],
     "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
+      "topics": [{ "slug": "cooking", "description": "recipes" }]
     }
   },
-  "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+
+  "GET /api/articles/:article_id": {
+    "description": "retrieves the article associated with the given article id",
+    "queries": "article_id is referenced by integer",
     "exampleResponse": {
-      "articles": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
-        }
-      ]
+      "article_id": 418,
+      "title": "a daily cup of joe",
+      "topic": "coffee",
+      "author": "barista",
+      "body": "coffee is life!",
+      "created_at": "20220518",
+      "votes": 0,
+      "comment_count": 0
     }
+  },
+
+  "PATCH /api/articles/:article_id": {
+    "description": "updates the votes property of the selected article by inc_votes as specified in query body, retrieves the newly updated article",
+    "queries": [],
+    "exampleResponse": {
+      "article_id": 418,
+      "title": "a daily cup of joe",
+      "topic": "coffee",
+      "author": "barista",
+      "body": "coffee is life!",
+      "created_at": "20220518",
+      "votes": 1,
+      "comment_count": 0
+    }
+  },
+
+  "GET /api/users": {
+    "description": "retrieves an array of all users, each with username property",
+    "queries": [],
+    "exampleResponse": [
+      { "username": "johnAppleseed" },
+      { "username": "coffeeGuy" }
+    ]
+  },
+
+  "GET /api/articles": {
+    "description": "retrieves an array of all articles",
+    "queries": [
+      "created_at",
+      "article_id",
+      "title",
+      "topic",
+      "author",
+      "votes",
+      "comment_count"
+    ],
+    "exampleResponse": [
+      {
+        "article_id": 418,
+        "title": "a daily cup of joe",
+        "topic": "coffee",
+        "author": "barista",
+        "body": "coffee is life!",
+        "created_at": "20220518",
+        "votes": 1,
+        "comment_count": 0
+      },
+      {
+        "article_id": 419,
+        "title": "a daily cuppa",
+        "topic": "tea",
+        "author": "teamaster",
+        "body": "tea is life!",
+        "created_at": "20220518",
+        "votes": 1,
+        "comment_count": 0
+      }
+    ]
+  },
+
+  "GET /api/articles/:article_id/comments": {
+    "description": "retrieves an array of all comments of the selected article as given by article_id",
+    "queries": ["article_id"],
+    "exampleResponse": [
+      {
+        "comment_id": 1,
+        "body": "Awesome article!",
+        "votes": 2,
+        "author": "user1",
+        "created_at": "20220518"
+      }
+    ]
+  },
+
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts new comment to selected article given by article_id, and retrieves newly posted comment",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "comment_id": 2,
+      "body": "Great article!",
+      "article_id": 418,
+      "username": "user2",
+      "votes": 0,
+      "created_at": "20220520"
+    }
+  },
+
+  "DELETE /api/comments/:comment_id": {
+    "description": "removes selected comment given by comment_id in query",
+    "queries": ["comment_id"],
+    "exampleResponse": {}
   }
 }
