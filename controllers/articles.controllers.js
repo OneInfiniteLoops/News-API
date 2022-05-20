@@ -4,15 +4,6 @@ const {
   fetchArticles,
 } = require("../models/articles.models");
 
-exports.getEndpoints = (req, res, next) => {
-  res
-    .status(200)
-    .send({})
-    .catch((err) => {
-      next(err);
-    });
-};
-
 exports.getArticleByID = (req, res, next) => {
   fetchArticleByID(req.params.article_id)
     .then((article) => {
