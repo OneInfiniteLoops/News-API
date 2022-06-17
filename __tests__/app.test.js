@@ -289,7 +289,7 @@ describe("GET /api/articles", () => {
       .expect(200)
       .then((res) => {
         const { articles } = res.body;
-        expect(articles).toBeSortedBy("article_id");
+        expect(articles).toBeSortedBy("article_id", { descending: true });
       });
   });
   test("200: Responds with array of articles ordered by a non-default valid ORDER, when 'ASC' is specified as order in query", () => {

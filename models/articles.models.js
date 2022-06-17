@@ -36,7 +36,7 @@ exports.updateVotesOfArticleByID = (articleId, newVote) => {
     });
 };
 
-exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
   const validSortBy = [
     "created_at",
     "article_id",
@@ -54,23 +54,27 @@ exports.fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
   FROM articles 
   LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
+  if (!validSortBy.includes(sort_by) || !validOrder.includes(order)) {
+    return Promise.reject({ status: 400, message: "400 - Invalid Query" });
+  }
+
   if (topic) {
     queryValues.push(topic);
     queryStr += ` WHERE articles.topic = $1`;
   }
 
-  queryStr += ` GROUP BY articles.article_id`;
+  queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
 
-  if (validSortBy.includes(sort_by)) {
-    queryStr += ` ORDER BY ${sort_by}`;
-    if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
-      queryStr += ` ASC`;
-    } else if (order && !validOrder.includes(order)) {
-      return Promise.reject({ status: 400, message: "400 - Invalid Query" });
-    }
-  } else {
-    return Promise.reject({ status: 400, message: "400 - Invalid Query" });
-  }
+  // if (validSortBy.includes(sort_by)) {
+  //   queryStr += ` ORDER BY ${sort_by}`;
+  //   if ((validOrder.includes(order) && order === "asc") || order === "ASC") {
+  //     queryStr += ` ASC`;
+  //   } else if (order && !validOrder.includes(order)) {
+  //     return Promise.reject({ status: 400, message: "400 - Invalid Query" });
+  //   }
+  // } else {
+  //   return Promise.reject({ status: 400, message: "400 - Invalid Query" });
+  // }
 
   return db.query(queryStr, queryValues).then((articles) => {
     if (!articles.rows.length) {
