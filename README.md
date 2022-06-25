@@ -1,4 +1,4 @@
-# News API (News Space)
+# News API (for NewsSpace)
 
 > This project was built as part of the backend for the News Space app hosted on Heroku. The RESTful API provides the end-user with an interface to interact with the databases, and retrieve articles, comments, topics and users.
 > Live demo [_here_](https://news-space.herokuapp.com/).
